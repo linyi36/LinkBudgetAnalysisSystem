@@ -1,17 +1,18 @@
 % /*!
 % * @brief 天线方向图分析小工具主脚本。
 % * @details 本脚本从 input 文件夹读取方向图 CSV，绘制 Phi/Theta/Gain 二维等高线图，
-% *          绘制固定 Phi/Theta 的一维切面，统计指定角度区域内 Gain 的
+% *          保留老师原版 Fig.100/Fig.200/Fig.300/Fig.400 四类方向图，
+% *          同时绘制固定 Phi/Theta 的一维切面，统计指定角度区域内 Gain 的
 % *          min/mean/max/median/std 以及 Gain 大于阈值的比例，并将 PNG、CSV
 % *          和 TXT 报告保存到 output 文件夹；可自动打开 Phi/Theta 交互查询界面。
 % * @pre tools/AntennaPatternAnalyzer/input 中存在方向图 CSV 文件。
 % * @bug Null
 % * @warning 若 CSV 中存在频率列，将自动选择最接近 TargetFreqGHz 的频点。
 % * @author Lin Yi
-% * @version 2.4
+% * @version 2.5
 % * @date 2026.05.30
 % * @copyright Null
-% * @remark { revision history: 2026.05.30. V2.4, Lin Yi, restore main script and call OpenPatternSlider(Pattern). }
+% * @remark { revision history: 2026.05.30. V2.5, Lin Yi, keep teacher Fig.100/200/300/400 and add ROI UI. }
 % */
 
 clear; clc; close all;
@@ -81,9 +82,13 @@ fprintf('=========================================\n');
 %% 3. 读取方向图
 Pattern = ReadAntennaPatternCsv(PatternFilePath, Cfg.TargetFreqGHz);
 
-%% 4. 绘制二维等高线图
-ContourPath = fullfile(PatternOutDir, [PatternName, '_Contour.png']);
-PlotPatternContour(Pattern, ContourPath, Cfg.FlagShowFigure);
+%% 4. 绘制老师原版方向图：Fig.100/200/300/400
+% Fig.100: 二维伪彩色图
+% Fig.200: 二维等高线图 + 实线 + ROI 标注
+% Fig.300: 三维极坐标方向图
+% Fig.400: patternCustom 三维方向图，若无 Antenna Toolbox 则自动跳过
+OverviewResult = PlotPatternOverviewFigures(Pattern, Cfg, PatternOutDir, Cfg.FlagShowFigure);
+ContourPath = OverviewResult.ContourRoiPng;
 
 %% 5. 绘制一维切面图
 CutResult = PlotPatternCuts(Pattern, ...
@@ -116,7 +121,7 @@ WritePatternAnalysisReport(ReportPath, Pattern, Cfg, RegionStats, KeyDirTable, C
 if Cfg.FlagOpenSlider
     fprintf('\n正在打开 Phi / Theta 滑块交互界面...\n');
     if exist('OpenPatternSlider', 'file') == 2
-        OpenPatternSlider(Pattern);
+        OpenPatternSlider(Pattern, Cfg);
     else
         warning('未找到 OpenPatternSlider.m，请检查该文件是否在 tools/AntennaPatternAnalyzer 目录下。');
     end
@@ -128,7 +133,14 @@ PrintRegionStatsSafe(RegionStats, Cfg);
 fprintf('\n========== AntennaPatternAnalyzer finished ==========\n');
 fprintf('Input file : %s\n', PatternFilePath);
 fprintf('Output dir : %s\n', PatternOutDir);
-fprintf('Contour    : %s\n', ContourPath);
+fprintf('Fig100 PNG : %s\n', OverviewResult.HeatmapPng);
+fprintf('Fig200 PNG : %s\n', OverviewResult.ContourRoiPng);
+fprintf('Fig300 PNG : %s\n', OverviewResult.Spherical3dPng);
+if isfield(OverviewResult, 'PatternCustomGenerated') && OverviewResult.PatternCustomGenerated
+    fprintf('Fig400 PNG : %s\n', OverviewResult.PatternCustomPng);
+else
+    fprintf('Fig400 PNG : skipped, Antenna Toolbox patternCustom unavailable or failed.\n');
+end
 fprintf('Region CSV : %s\n', RegionCsvPath);
 fprintf('KeyDir CSV : %s\n', KeyDirCsvPath);
 fprintf('Report TXT : %s\n', ReportPath);

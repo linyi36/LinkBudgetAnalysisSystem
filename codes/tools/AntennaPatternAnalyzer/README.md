@@ -1,43 +1,83 @@
 # AntennaPatternAnalyzer
 
-该工具用于读取 `input` 文件夹中的天线方向图 CSV，并输出方向图分析结果。
+## 功能说明
+
+本工具用于读取天线方向图 CSV，并进行方向图可视化、切面分析、ROI 区域统计和交互式查询。
+
+本版本保留老师原版小工具中的四类方向图：
+
+1. Fig.100：二维伪彩色热力图 `pcolor`
+2. Fig.200：二维等高线图 `contourf`，并叠加实线等高线、ROI 边框和极值点
+3. Fig.300：三维极坐标方向图，形状使用真实线性幅度，颜色使用真实 dBi
+4. Fig.400：`patternCustom` 三维方向图，若当前 MATLAB 没有 Antenna Toolbox，则自动跳过
+
+同时新增：
+
+1. 固定多个 Theta 扫描 Phi，并画到同一张图
+2. 固定多个 Phi 扫描 Theta，并画到同一张图
+3. 指定 ROI 区域统计 min / mean / max / median / std
+4. 统计 ROI 内 Gain 大于指定阈值的比例
+5. 输出关键方向增益表
+6. 在交互界面中支持 Phi/Theta 滑块和手动输入查询
+7. 在交互界面中增加等高线图 / 伪彩色图切换复选框
+8. 在交互界面右下角增加 ROI 区域分析框
 
 ## 目录结构
 
 ```text
 AntennaPatternAnalyzer/
-├── input/                      # 输入方向图 CSV，可放多个方向图
-├── output/                     # 输出 PNG、CSV、TXT 结果
-├── mainPlotGain.m              # 主入口脚本
-├── ReadAntennaPatternCsv.m     # 读取方向图
-├── PlotPatternContour.m        # 二维等高线图
-├── PlotPatternCuts.m           # 一维切面图，支持多个固定角度
-├── AnalyzeGainRegion.m         # 指定区域统计
-├── QueryPatternGain.m          # 指定 Phi/Theta 查询 Gain
-└── OpenPatternSlider.m         # 可选滑块交互界面
+├── input/                         # 输入方向图 CSV
+├── output/                        # 输出图像、CSV、TXT 报告
+├── mainPlotGain.m                 # 主入口脚本
+├── ReadAntennaPatternCsv.m        # 读取方向图 CSV
+├── PlotPatternOverviewFigures.m   # 绘制 Fig.100/200/300/400
+├── PlotPatternCuts.m              # 绘制一维切面图
+├── AnalyzeGainRegion.m            # ROI 区域统计
+├── QueryPatternGain.m             # 指定 Phi/Theta 查询 Gain
+├── BuildKeyDirectionGainTable.m   # 关键方向增益表
+├── OpenPatternSlider.m            # 滑块、手动输入、ROI UI 界面
+└── WritePatternAnalysisReport.m   # 输出 TXT 报告
 ```
 
-## 运行方法
-
-在 MATLAB 中运行：
+## 运行方式
 
 ```matlab
 clear; clc; close all;
-cd('工程根目录/codes/tools/AntennaPatternAnalyzer')
+cd('工程目录/codes/tools/AntennaPatternAnalyzer')
 mainPlotGain
 ```
 
-## 当前支持功能
+## 主要配置
 
-1. 绘制 Phi/Theta/Gain 二维等高线图；
-2. 固定 Theta 扫描 Phi，或固定 Phi 扫描 Theta；
-3. 固定角度支持向量输入，多条切面会画到同一张图上；
-4. 支持指定 Phi/Theta 查询 Gain；
-5. 支持指定角度区域统计 min/mean/max/median/std，以及 Gain 大于指定阈值的比例；
-6. 支持输出 PNG 图、CSV 统计结果和 TXT 简要报告；
-7. 可选打开 Phi/Theta 滑块交互界面。
+在 `mainPlotGain.m` 中修改：
 
-## 输入与输出
+```matlab
+Cfg.PatternFileName = '314B_Air_RealizedGainPlot.csv';
+Cfg.PhiRangeDeg     = [75, 105];
+Cfg.ThetaRangeDeg   = [75, 105];
+Cfg.GainThresholdDb = -5;
+Cfg.FixedThetaListDeg = [75, 90, 105];
+Cfg.FixedPhiListDeg   = [90, 270];
+Cfg.FlagOpenSlider = true;
+```
 
-- 输入：`input/*.csv`
-- 输出：`output/<方向图文件名>/`
+## 输出结果
+
+输出目录为：
+
+```text
+output/方向图文件名/
+```
+
+主要输出包括：
+
+- `*_Fig100_PseudoColorHeatmap.png`
+- `*_Fig200_Contour_ROI.png`
+- `*_Fig300_3D_SphericalPattern.png`
+- `*_Fig400_PatternCustom.png`，需要 Antenna Toolbox
+- `*_FixedThetaScanPhi.png`
+- `*_FixedPhiScanTheta.png`
+- `*_RegionStats.csv`
+- `*_KeyDirectionGain.csv`
+- `*_CutData.csv`
+- `*_AnalysisReport.txt`
