@@ -1,0 +1,6 @@
+DirectionName,PhiDeg,ThetaDeg,GainDb
+head,270,90,1.15035
+tail,90,90,-0.664829
+side0,0,90,-2.87502
+side180,180,90,-2.91228
+top,0,0,3.76108

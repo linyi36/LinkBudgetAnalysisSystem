@@ -1,0 +1,2 @@
+RegionName,PhiMinDeg,PhiMaxDeg,ThetaMinDeg,ThetaMaxDeg,ThresholdDb,NumValidPoints,GainMinDb,GainMeanDb,GainMaxDb,GainMedianDb,GainStdDb,PercentGreaterThanThreshold,PercentLessOrEqualThreshold,PassFlag
+TailPm15,75,105,75,105,-5,3721,-1.30732,-0.557119619392988,0.581857,-0.707993,0.516196148658431,100,0,1

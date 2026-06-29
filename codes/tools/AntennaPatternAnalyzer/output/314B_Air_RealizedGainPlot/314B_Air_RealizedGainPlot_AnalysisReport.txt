@@ -1,0 +1,36 @@
+Antenna Pattern Analyzer Report
+================================
+
+Input file      : D:\ly\desk\天线链路版本\LinkBudgetAnalysisSystem6 - 副本\LinkBudgetAnalysisSystem\LinkBudgetAnalysisSystem\codes\tools\AntennaPatternAnalyzer\input\314B_Air_RealizedGainPlot.csv
+Selected freq   : NaN GHz
+Phi range       : 0.000 ~ 360.000 deg
+Theta range     : 0.000 ~ 180.000 deg
+Gain range      : -29.418 ~ 4.216 dBi
+
+Region Statistics
+-----------------
+Region name     : TailPm15
+Phi range       : 75.000 ~ 105.000 deg
+Theta range     : 75.000 ~ 105.000 deg
+Threshold       : -5.000 dBi
+Gain min        : -1.307 dBi
+Gain mean       : -0.557 dBi
+Gain max        : 0.582 dBi
+Gain median     : -0.708 dBi
+Gain std        : 0.516 dB
+Gain > threshold: 100.00 %
+Pass flag       : 1
+
+Key Direction Gain
+------------------
+head               Phi= 270.000 deg, Theta=  90.000 deg, Gain=   1.150 dBi
+tail               Phi=  90.000 deg, Theta=  90.000 deg, Gain=  -0.665 dBi
+side0              Phi=   0.000 deg, Theta=  90.000 deg, Gain=  -2.875 dBi
+side180            Phi= 180.000 deg, Theta=  90.000 deg, Gain=  -2.912 dBi
+top                Phi=   0.000 deg, Theta=   0.000 deg, Gain=   3.761 dBi
+
+Output Files
+------------
+Fixed theta cut PNG : D:\ly\desk\天线链路版本\LinkBudgetAnalysisSystem6 - 副本\LinkBudgetAnalysisSystem\LinkBudgetAnalysisSystem\codes\tools\AntennaPatternAnalyzer\output\314B_Air_RealizedGainPlot\314B_Air_RealizedGainPlot_FixedThetaScanPhi.png
+Fixed phi cut PNG   : D:\ly\desk\天线链路版本\LinkBudgetAnalysisSystem6 - 副本\LinkBudgetAnalysisSystem\LinkBudgetAnalysisSystem\codes\tools\AntennaPatternAnalyzer\output\314B_Air_RealizedGainPlot\314B_Air_RealizedGainPlot_FixedPhiScanTheta.png
+Cut data CSV        : D:\ly\desk\天线链路版本\LinkBudgetAnalysisSystem6 - 副本\LinkBudgetAnalysisSystem\LinkBudgetAnalysisSystem\codes\tools\AntennaPatternAnalyzer\output\314B_Air_RealizedGainPlot\314B_Air_RealizedGainPlot_CutData.csv

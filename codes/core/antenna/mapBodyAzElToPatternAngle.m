@@ -14,7 +14,6 @@ function [AzPattern, ElPattern] = mapBodyAzElToPatternAngle(AzBody, ElBody, angl
 %       用于 getAntennaGain 查询方向图的角度。
 %
 % 弹载天线说明：
-%   老师说：
 %       phi270 theta90 是头
 %       phi90  theta90 是弹尾
 %
