@@ -1,0 +1,31 @@
+name: Auto Create PR
+
+# 触发条件：当你推送代码到除了 main 之外的其他分支时，自动运行
+on:
+  push:
+    branches-ignore:
+      - main
+
+# 赋予脚本创建 PR 的读写权限
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  create-pull-request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出当前代码
+        uses: actions/checkout@v4
+
+      - name: 全自动创建 Pull Request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 尝试使用 GitHub 官方命令行工具 (gh) 自动建 PR
+          # 如果 PR 已经存在，它会提示并跳过，不会报错退出
+          gh pr create \
+            --base main \
+            --head ${{ github.ref_name }} \
+            --title "作业提交: 自动生成 PR (${{ github.ref_name }})" \
+            --body "老师您好，这是由 GitHub Actions 全自动触发并生成的 Pull Request 申请。" || echo "PR 可能已存在，跳过创建。"
