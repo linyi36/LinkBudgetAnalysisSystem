@@ -1,0 +1,5 @@
+[pr_description]
+extra_instructions="请始终使用中文来输出总结，并且尽量简明扼要地分点说明。"
+
+[pr_reviewer]
+extra_instructions="请始终使用中文来进行代码审查，重点关注链路预算分析计算的逻辑、参数校验以及潜在的 bug。"
